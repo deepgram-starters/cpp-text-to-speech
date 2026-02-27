@@ -339,8 +339,8 @@ static void init_session_secret() {
 // DEEPGRAM API - Direct HTTP calls to the Deepgram TTS endpoint via libcurl
 // ============================================================================
 
-// curl_write_callback collects response data from libcurl into a string.
-static size_t curl_write_callback(void* contents, size_t size, size_t nmemb, void* userp) {
+// writeCallback collects response data from libcurl into a string.
+static size_t writeCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     size_t total = size * nmemb;
     auto* buffer = static_cast<std::string*>(userp);
     buffer->append(static_cast<char*>(contents), total);
@@ -378,7 +378,7 @@ static std::string generate_audio(const std::string& text, const std::string& mo
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
     curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, static_cast<long>(body.size()));
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_callback);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_data);
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
 
